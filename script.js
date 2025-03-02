@@ -84,3 +84,101 @@ function onRatingClick(e) {
 	hornsU = horns.slice(0,num);
 	if(hornsU.length > curRating) {hornsU = hornsU.slice(curRating);}
 	hornsD = horns.slice(num,curRating);
+	
+	// set props based on which rating was clicked on
+	switch (num) {
+		case 0:
+			eyeTarg = eye0;
+			mouthTarg = mouth0;
+			chinY = 0;
+			pupilS = 1;
+			earS = .9; earY = 10; earRotL = "-15deg"; earRotR = "15deg"; earringX = -12; earringY = 8;
+			tongueY = 0; toothTopY = 0; toothBotY = 0;
+			break;
+		case 1:
+			eyeTarg = eye1;
+			mouthTarg = mouth1;
+			chinY = 3;
+			pupilS = .84;
+			earS = 1.1; earY = -4; earRotL = "10deg"; earRotR = "-10deg"; earringX = 0; earringY = 0;
+			tongueY = 2; toothTopY = 5; toothBotY = -17;
+			break;
+		case 2:
+			eyeTarg = eye2;
+			mouthTarg = mouth2;
+			chinY = -2;
+			pupilS = .94;
+			earS = 1.05; earY = -2; earRotL = "5deg"; earRotR = "-5deg"; earringX = -2; earringY = -1;
+			tongueY = 0; toothTopY = 0; toothBotY = 0;
+			break;
+		case 3:
+			eyeTarg = eye3;
+			mouthTarg = mouth3;
+			chinY = -4;
+			pupilS = 1;
+			earS = 1; earY = 0; earRotL = "0deg"; earRotR = "0deg"; earringX = -4; earringY = -2;
+			tongueY = 0; toothTopY = 0; toothBotY = 0;
+			break;
+		case 4:
+			eyeTarg = eye4;
+			mouthTarg = mouth4;
+			chinY = 3;
+			pupilS = 1.1;
+			earS = .95; earY = -3; earRotL = "2deg"; earRotR = "-2deg"; earringX = -2; earringY = -5;
+			tongueY = -4; toothTopY = 6; toothBotY = -16;
+			break;
+		case 5:
+			eyeTarg = eye5;
+			mouthTarg = mouth5;
+			chinY = 14;
+			pupilS = 1.2;
+			earS = .9; earY = -6; earRotL = "4deg"; earRotR = "-4deg"; earringX = 0; earringY = -10;
+			tongueY = 0; toothTopY = 2; toothBotY = -2;
+			break;
+		default:
+			break;
+	}
+	
+	tl
+		.to(eyePaths, 			{morphSVG: eyeTarg}, 0)
+		.to(mouthPaths, 		{morphSVG: mouthTarg}, 0)
+		.to(chin, 			{y: chinY}, 0)
+		.to(pupil, 			{scale: pupilS}, 0)
+		.to(earL, 			{scale: earS, y: earY, rotate: earRotL}, 0)
+		.to(earR, 			{scale: earS, y: earY, rotate: earRotR}, 0)
+		.to(earring, 			{x: earringX, y: earringY}, 0)
+		.to(tongue, 			{y: tongueY}, 0)
+		.to(toothTop, 			{y: toothTopY}, 0)
+		.to(toothBot, 			{y: toothBotY}, 0)
+	;
+	
+	if(hornsU.length) {
+		if(dur) {
+			gsap.to(hornsU, 	{scale: 1, stagger:{each:.1, ease: "power1.out"}, duration: dur, ease: "back.out"});
+		} else {
+			gsap.set(hornsU, 	{scale: 1});
+		}		
+	}
+	if(hornsD.length) {
+		if(dur) {
+			gsap.to(hornsD,	{scale: 0, stagger: {each:-.08, ease: "power2.out"}, duration: dur, ease: "back.in"});
+		} else {
+			gsap.set(hornsD,	{scale: 0});
+		}
+	}
+	
+	curRating = num;
+	
+	tl.play();
+}
+
+
+
+function onReduceMotionMQ() {
+	// change animation time depending on user preference
+	if(mq.matches) {
+		dur = durReduced;
+	} else {
+		dur = durNoPref;
+	}
+}
